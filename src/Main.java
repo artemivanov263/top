@@ -1,74 +1,98 @@
-import java.util.PriorityQueue;
+import java.util.*;
 
-class Task implements Comparable<Task> {
+class MyClass {
+    private int number;
     private String name;
-    private int priority;
-    private String category;
 
-    public Task(String name, int priority, String category) {
+    public MyClass(int number, String name) {
+        this.number = number;
         this.name = name;
-        this.priority = priority;
-        this.category = category;
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getPriority() {
-        return priority;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    @Override
-    public int compareTo(Task o) {
-        if (this.priority != o.priority) {
-            return Integer.compare(this.priority, o.priority);
-        } else {
-            return this.category.compareTo(o.category);
-        }
-    }
-
     @Override
     public String toString() {
-        return "Task{" +
-                "name='" + name + '\'' +
-                ", priority=" + priority +
-                ", category='" + category + '\'' +
+        return "MyClass{" +
+                "number=" + number +
+                ", name='" + name + '\'' +
                 '}';
     }
 }
 
-class TaskManager {
-    private PriorityQueue<Task> tasks = new PriorityQueue<>();
-
-    public void addTask(Task task) {
-        tasks.add(task);
+class NumberComparator implements Comparator<MyClass> {
+    @Override
+    public int compare(MyClass o1, MyClass o2) {
+        return o1.getNumber() - o2.getNumber();
     }
+}
 
-    public void printTasks() {
-        while (!tasks.isEmpty()) {
-            System.out.println(tasks.poll());
-        }
+class NameComparator implements Comparator<MyClass> {
+    @Override
+    public int compare(MyClass o1, MyClass o2) {
+        return o1.getName().compareTo(o2.getName());
     }
 }
 
 public class Main {
     public static void main(String[] args) {
-        Task task1 = new Task("Task1", 1, "Feature");
-        Task task2 = new Task("Task2", 2, "Bug");
-        Task task3 = new Task("Task3", 1, "Documentation");
-        Task task4 = new Task("Task4", 3, "Feature");
+        List<MyClass> list = new ArrayList<>();
+        list.add(new MyClass(3, "C"));
+        list.add(new MyClass(1, "A"));
+        list.add(new MyClass(2, "B"));
 
-        TaskManager taskManager = new TaskManager();
-        taskManager.addTask(task1);
-        taskManager.addTask(task2);
-        taskManager.addTask(task3);
-        taskManager.addTask(task4);
+        System.out.println("Before sorting:");
+        for (MyClass obj : list) {
+            System.out.println(obj);
+        }
 
-        taskManager.printTasks();
+        System.out.println("\nSorting by number:");
+        Collections.sort(list, new NumberComparator());
+        for (MyClass obj : list) {
+            System.out.println(obj);
+        }
+
+        System.out.println("\nSorting by name:");
+        Collections.sort(list, new NameComparator());
+        for (MyClass obj : list) {
+            System.out.println(obj);
+        }
+
+
+        String str = "java is fun and java is powerful";
+
+        HashMap<Character, Integer> charCountMap = new HashMap<>();
+
+        for (char c : str.toCharArray()) {
+            if (c != ' ') {
+                charCountMap.put(c, charCountMap.getOrDefault(c, 0) + 1);
+            }
+        }
+
+        for (char key : charCountMap.keySet()) {
+            System.out.println(key + ": " + charCountMap.get(key));
+        }
+
+
+        Map<Integer, String> originalMap = new HashMap<>();
+        originalMap.put(1, "C");
+        originalMap.put(2, "B");
+        originalMap.put(3, "A");
+
+        Map<String, Integer> invertedMap = new HashMap<>();
+
+        for (Map.Entry<Integer, String> entry : originalMap.entrySet()) {
+            invertedMap.put(entry.getValue(), entry.getKey());
+        }
+
+        System.out.println(invertedMap);
+
+
     }
 }
