@@ -1,98 +1,70 @@
-import java.util.*;
-
-class MyClass {
-    private int number;
-    private String name;
-
-    public MyClass(int number, String name) {
-        this.number = number;
-        this.name = name;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return "MyClass{" +
-                "number=" + number +
-                ", name='" + name + '\'' +
-                '}';
-    }
-}
-
-class NumberComparator implements Comparator<MyClass> {
-    @Override
-    public int compare(MyClass o1, MyClass o2) {
-        return o1.getNumber() - o2.getNumber();
-    }
-}
-
-class NameComparator implements Comparator<MyClass> {
-    @Override
-    public int compare(MyClass o1, MyClass o2) {
-        return o1.getName().compareTo(o2.getName());
-    }
-}
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Main {
     public static void main(String[] args) {
-        List<MyClass> list = new ArrayList<>();
-        list.add(new MyClass(3, "C"));
-        list.add(new MyClass(1, "A"));
-        list.add(new MyClass(2, "B"));
+        int[] numbers = {1, 2, 3, 2, 1, 4};
+        System.out.println(findnum(numbers));
+        String[] words = {"apple", "banana", "apple", "cherry", "banana"};
+        System.out.println(findword(words));
+        numbers = new int[]{10, 20, 30, 40, 50};
+        int target = 35;
 
-        System.out.println("Before sorting:");
-        for (MyClass obj : list) {
-            System.out.println(obj);
-        }
+        int[] result = findClosestNumbers(numbers, target);
 
-        System.out.println("\nSorting by number:");
-        Collections.sort(list, new NumberComparator());
-        for (MyClass obj : list) {
-            System.out.println(obj);
-        }
+        System.out.println("Ближайшие числа: [" + result[0] + ", " + result[1] + "]");
 
-        System.out.println("\nSorting by name:");
-        Collections.sort(list, new NameComparator());
-        for (MyClass obj : list) {
-            System.out.println(obj);
+
         }
 
 
-        String str = "java is fun and java is powerful";
+    public static Set<Integer> findnum(int[] nums) {
+        Set<Integer> numbers = new HashSet<>();
+        for (int num : nums) {
+            numbers.add(num);
+        }
+        return numbers;
+    }
 
-        HashMap<Character, Integer> charCountMap = new HashMap<>();
+    public static Set<String> findword(String[] words) {
+        Set<String> word = new HashSet<>();
+        for (String num : words) {
+            word.add(String.valueOf(num));
 
-        for (char c : str.toCharArray()) {
-            if (c != ' ') {
-                charCountMap.put(c, charCountMap.getOrDefault(c, 0) + 1);
-            }
+        }
+        return word;
+    }
+
+    public static int[] findClosestNumbers(int[] array, int target) {
+        TreeSet<Integer> set = new TreeSet<>();
+
+        // Добавляем все элементы массива в TreeSet
+        for (int num : array) {
+            set.add(num);
         }
 
-        for (char key : charCountMap.keySet()) {
-            System.out.println(key + ": " + charCountMap.get(key));
+        // Находим ближайший меньший элемент
+        Integer lower = set.floor(target);
+        // Находим ближайший больший элемент
+        Integer higher = set.ceiling(target);
+
+        // Если нет ни одного подходящего элемента, возвращаем null
+        if (lower == null || higher == null) {
+            return null;
         }
 
-
-        Map<Integer, String> originalMap = new HashMap<>();
-        originalMap.put(1, "C");
-        originalMap.put(2, "B");
-        originalMap.put(3, "A");
-
-        Map<String, Integer> invertedMap = new HashMap<>();
-
-        for (Map.Entry<Integer, String> entry : originalMap.entrySet()) {
-            invertedMap.put(entry.getValue(), entry.getKey());
-        }
-
-        System.out.println(invertedMap);
-
-
+        // Возвращаем результат в виде массива
+        return new int[]{lower, higher};
     }
 }
+
+
+
+
+
+
+
+
+
+
